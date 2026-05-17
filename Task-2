@@ -1,0 +1,48 @@
+# Install Required Libraries:
+!pip install SpeechRecognition pydub
+!apt-get install ffmpeg
+
+import speech_recognition as sr
+from pydub import AudioSegment
+
+recognizer = sr.Recognizer()
+audio = AudioSegment.from_file("Record.m4a")
+audio.export("converted.wav", format="wav")
+
+# Function to convert speech to text
+def recognize_speech():
+
+    print("   \n=== SPEECH RECOGNITION SYSTEM ===")
+
+    try:
+        # Read audio file
+        with sr.AudioFile("converted.wav") as source:
+
+            print("\nProcessing audio file...\n")
+
+            # Read audio data
+            audio_data = recognizer.record(source)
+
+            print("Recognizing speech...\n")
+
+            # Convert speech into text
+            text = recognizer.recognize_google(audio_data)
+
+            print("Transcribed Text:")
+            print("-----------------------------------")
+            print(text)
+            print("-----------------------------------")
+
+    except sr.UnknownValueError:
+        print("Could not understand audio.")
+
+    except sr.RequestError as e:
+        print(f"Could not request results; {e}")
+
+    except Exception as e:
+        print(f"Error: {e}")
+
+
+# Main Program
+if __name__ == "__main__":
+    recognize_speech()
